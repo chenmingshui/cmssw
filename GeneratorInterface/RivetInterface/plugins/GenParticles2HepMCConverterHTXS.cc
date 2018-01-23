@@ -25,11 +25,11 @@
 
 using namespace std;
 
-class GenParticles2HepMCConverter : public edm::stream::EDProducer<>
+class GenParticles2HepMCConverterHTXS : public edm::stream::EDProducer<>
 {
 public:
-  explicit GenParticles2HepMCConverter(const edm::ParameterSet& pset);
-  ~GenParticles2HepMCConverter() {};
+  explicit GenParticles2HepMCConverterHTXS(const edm::ParameterSet& pset);
+  ~GenParticles2HepMCConverterHTXS() {};
 
   //void beginRun(const edm::Run& run, const edm::EventSetup& eventSetup) override;
   void produce(edm::Event& event, const edm::EventSetup& eventSetup) override;
@@ -56,7 +56,7 @@ private:
 
 };
 
-GenParticles2HepMCConverter::GenParticles2HepMCConverter(const edm::ParameterSet& pset)
+GenParticles2HepMCConverterHTXS::GenParticles2HepMCConverterHTXS(const edm::ParameterSet& pset)
 {
 //  lheEventToken_ = pset.getParameter<edm::InputTag>("lheEvent");
   genParticlesToken_ = consumes<reco::CandidateView>(pset.getParameter<edm::InputTag>("genParticles"));
@@ -66,7 +66,7 @@ GenParticles2HepMCConverter::GenParticles2HepMCConverter(const edm::ParameterSet
   produces<edm::HepMCProduct>("unsmeared");
 }
 
-//void GenParticles2HepMCConverter::beginRun(edm::Run& run, const edm::EventSetup& eventSetup)
+//void GenParticles2HepMCConverterHTXS::beginRun(edm::Run& run, const edm::EventSetup& eventSetup)
 //{
   //edm::Handle<GenRunInfoProduct> genRunInfoHandle;
   //event.getByToken(genRunInfoToken_, genRunInfoHandle);
@@ -78,7 +78,8 @@ GenParticles2HepMCConverter::GenParticles2HepMCConverter(const edm::ParameterSet
   // const double xsecNLOErr = genRunInfoHandle->externalXSecNLO().error();
 //}
 
-void GenParticles2HepMCConverter::produce(edm::Event& event, const edm::EventSetup& eventSetup)
+
+void GenParticles2HepMCConverterHTXS::produce(edm::Event& event, const edm::EventSetup& eventSetup)
 {
 //  edm::Handle<LHEEventProduct> lheEventHandle;
 //  event.getByToken(lheEventToken_, lheEventHandle);
@@ -192,11 +193,35 @@ void GenParticles2HepMCConverter::produce(edm::Event& event, const edm::EventSet
       const reco::Candidate* mother = p->mother(j);
       vertex->add_particle_in(genCandToHepMCMap[mother]);
       vertex->add_particle_out(hepmc_particles[i]);
+   
     }
+
   }
 
   // Finalize HepMC event record
-  hepmc_event->set_signal_process_vertex(*(vertex1->vertices_begin()));
+  //hepmc_event->set_signal_process_vertex(*(vertex1->vertices_begin()));
+
+  //Loop over all vertices 
+  int particle_pruned = 0;
+  int vtx = 0;
+  bool endloop = false;
+  for (HepMC::GenEvent::vertex_iterator ver = hepmc_event->vertices_begin(); ver != hepmc_event->vertices_end(); ver++){    
+      if(endloop || hepmc_event->signal_process_vertex()) break;
+      vtx++;
+      //cout << "vtx= " << vtx ;
+      particle_pruned = 0;
+      HepMC::GenVertex::particle_iterator par = (*ver)->particles_begin(HepMC::children);    
+      for (; par != (*ver)->particles_end(HepMC::children); ++par){
+          particle_pruned++;
+          //cout << " particle_pruned= " << particle_pruned << " pdgid= " << (*par)->pdg_id() << " ; ";       
+          if ((*par)->pdg_id() == 25){
+              hepmc_event->set_signal_process_vertex(*ver);
+              endloop=true;
+          }   
+      }
+      //cout<<endl;
+      //if(endloop) cout << " assigned as signal_process_vertex!" << endl;   
+  }
 
   std::unique_ptr<edm::HepMCProduct> hepmc_product(new edm::HepMCProduct());
   hepmc_product->addHepMCData(hepmc_event);
@@ -204,4 +229,4 @@ void GenParticles2HepMCConverter::produce(edm::Event& event, const edm::EventSet
 
 }
 
-DEFINE_FWK_MODULE(GenParticles2HepMCConverter);
+DEFINE_FWK_MODULE(GenParticles2HepMCConverterHTXS);

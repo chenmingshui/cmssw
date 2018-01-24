@@ -223,9 +223,9 @@ void GenParticles2HepMCConverterHTXS::produce(edm::Event& event, const edm::Even
       //if(endloop) cout << " assigned as signal_process_vertex!" << endl;   
   }
 
-  std::auto_ptr<edm::HepMCProduct> hepmc_product(new edm::HepMCProduct());
+  std::unique_ptr<edm::HepMCProduct> hepmc_product(new edm::HepMCProduct());
   hepmc_product->addHepMCData(hepmc_event);
-  event.put(hepmc_product, "unsmeared");
+  event.put(std::move(hepmc_product), "unsmeared");
 
 }
 

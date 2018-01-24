@@ -1,1 +1,0 @@
-from L1TriggerConfig.L1TUtmTriggerMenuProducers.L1TUtmTriggerMenuOnline_cfi import *

@@ -9,6 +9,9 @@ from DQM.L1TMonitor.L1TStage2CaloLayer1_cfi import *
 # CaloLayer2
 from DQM.L1TMonitor.L1TStage2CaloLayer2_cfi import *
 
+# CPPF 
+from DQM.L1TMonitor.L1TStage2CPPF_cfi import *
+
 # BMTF
 from DQM.L1TMonitor.L1TStage2BMTF_cff import *
 
@@ -35,6 +38,7 @@ l1tStage2OnlineDQM = cms.Sequence(
     l1tStage2CaloLayer1 +
     l1tStage2CaloLayer2 +
     l1tStage2BmtfOnlineDQMSeq +
+    l1tStage2Cppf +
     l1tStage2Omtf +
     l1tStage2Emtf +
     l1tStage2uGMTOnlineDQMSeq +

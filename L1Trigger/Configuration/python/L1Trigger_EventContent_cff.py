@@ -75,6 +75,7 @@ L1TriggerFEVTDEBUG = cms.PSet(
         "keep *_simBmtfDigis_*_*",
         "keep *_simOmtfDigis_*_*",
         "keep *_simEmtfDigis_*_*",
+        "keep *_emulatorCppfDigis_*_*",
         "keep *_simGmtStage2Digis_*_*",
         'keep *_simGtDigis_*_*', 
         "keep *_simGtStage2Digis_*_*",

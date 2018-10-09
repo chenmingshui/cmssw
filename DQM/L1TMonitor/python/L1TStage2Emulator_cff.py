@@ -47,6 +47,10 @@ valEmtfStage2Digis = simEmtfDigisData.clone()
 valEmtfStage2Digis.CSCInput = "emtfStage2Digis"
 valEmtfStage2Digis.RPCInput = "muonRPCDigis"
 
+# CPPF
+from L1Trigger.L1TMuonCPPF.emulatorCppfDigis_cfi import *
+valCppfStage2Digis = emulatorCppfDigis.clone()
+
 # uGMT
 from L1Trigger.L1TMuon.simGmtStage2Digis_cfi import *
 valGmtCaloSumDigis = simGmtCaloSumDigis.clone()
@@ -82,6 +86,7 @@ Stage2L1HardwareValidation = cms.Sequence(
     valKBmtfDigis +
     valOmtfDigis +
     valEmtfStage2Digis +
+    valCppfStage2Digis +
     valGmtCaloSumDigis +
     valGmtStage2Digis +
     valGtStage2Digis
@@ -128,6 +133,7 @@ l1tStage2EmulatorOnlineDQM = cms.Sequence(
     l1tdeStage2Bmtf +
     l1tdeStage2KalmanBmtf +
     l1tdeStage2Omtf +
+    l1tStage2Cppf   +
     l1tdeStage2EmtfOnlineDQMSeq +
     l1tStage2uGMTEmulatorOnlineDQMSeq +
     l1tdeStage2uGT +

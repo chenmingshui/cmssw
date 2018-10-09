@@ -14,6 +14,7 @@ EmulateCPPF::EmulateCPPF(const edm::ParameterSet& iConfig, edm::ConsumesCollecto
   MaxClusterSize_(0),
   BxCut_(0)
 {
+   std::cout<<"DELETEME In  EmulateCPPF "<<std::endl;
    MaxClusterSize_ = iConfig.getParameter<int>("MaxClusterSize");
    BxCut_ = iConfig.getParameter<std::vector<int>>("BxCut");
  
@@ -56,6 +57,7 @@ void EmulateCPPF::process(
 			  l1t::CPPFDigiCollection& cppf_recHit
 			  ) {
   
+   std::cout<<"DELETEME In  EmulateCPPF process"<<std::endl;
   if( cppfSource_ == CppfSource::File ){
     //Using the look up table to fill the information
     cppf_recHit.clear();

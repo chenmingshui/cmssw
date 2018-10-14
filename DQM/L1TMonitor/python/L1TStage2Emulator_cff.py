@@ -32,6 +32,15 @@ valOmtfDigis.srcDTTh = cms.InputTag('omtfStage2Digis')
 valOmtfDigis.srcCSC = cms.InputTag('omtfStage2Digis')
 valOmtfDigis.srcRPC = cms.InputTag('omtfStage2Digis')
 
+# CPPF
+# CPPF emulator's input is rpcRecHits
+from RecoLocalMuon.RPCRecHit.rpcRecHits_cfi import *
+valRpcRecHits = rpcRecHits.clone()
+valRpcRecHits.rpcDigiLabel = cms.InputTag('rpcCPPFRawToDigi')
+from L1Trigger.L1TMuonCPPF.emulatorCppfDigis_cfi import *
+valCppfStage2Digis = emulatorCppfDigis.clone()
+valCppfStage2Digis.recHitLabel = cms.InputTag('valRpcRecHits')
+
 # EMTF
 from L1Trigger.L1TMuonEndCap.simEmtfDigis_cfi import *
 valEmtfStage2Digis = simEmtfDigis.clone()
@@ -66,6 +75,8 @@ Stage2L1HardwareValidation = cms.Sequence(
     valCaloStage2Layer1Digis +
     valBmtfDigis +
     valOmtfDigis +
+    valRpcRecHits +
+    valCppfStage2Digis +
     valEmtfStage2Digis +
     valGmtCaloSumDigis +
     valGmtStage2Digis +
@@ -93,6 +104,9 @@ from DQM.L1TMonitor.L1TdeStage2BMTF_cfi import *
 # OMTF
 from DQM.L1TMonitor.L1TdeStage2OMTF_cfi import *
 
+# CPPF
+from DQM.L1TMonitor.L1TdeStage2CPPF_cff import *
+
 # EMTF
 from DQM.L1TMonitor.L1TdeStage2EMTF_cff import *
 
@@ -109,6 +123,7 @@ from DQM.L1TMonitor.L1TStage2uGTEmul_cfi import *
 l1tStage2EmulatorOnlineDQM = cms.Sequence(
     l1tdeStage2Bmtf +
     l1tdeStage2Omtf +
+    l1tdeStage2CppfOnlineDQMSeq +
     l1tdeStage2EmtfOnlineDQMSeq +
     l1tStage2uGMTEmulatorOnlineDQMSeq +
     l1tStage2uGtEmul

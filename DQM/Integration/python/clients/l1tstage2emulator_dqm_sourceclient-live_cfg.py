@@ -12,19 +12,12 @@ process.load("DQM.Integration.config.inputsource_cfi")
 # Testing in lxplus
 #process.load("DQM.Integration.config.fileinputsource_cfi")
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
-process.MessageLogger = cms.Service("MessageLogger",
-                                    destinations = cms.untracked.vstring('cout'),
-                                    #threshold = cms.untracked.string('INFO'),
-                                    threshold = cms.untracked.string('DEBUG'),
-                                    categories = cms.untracked.vstring(
-                                            'L1TdeStage2CPPF'
-                                    ),
-                                    debugModules = cms.untracked.vstring(
-                                            'L1TdeStage2CPPF',
-                                    )
-                                   )
-
-cms.options.SkipEvent = cms.untracked.vstring('ProductNotFound')
+#process.MessageLogger.cerr.threshold = 'INFO'
+#process.MessageLogger.categories.append('L1TdeStage2CPPF')
+#process.MessageLogger.cerr.INFO = cms.untracked.PSet(
+#	limit = cms.untracked.int32(-1)
+#)
+process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(100)
 
 # Required to load Global Tag
 process.load("DQM.Integration.config.FrontierCondition_GT_cfi")
